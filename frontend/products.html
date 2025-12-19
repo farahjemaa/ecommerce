@@ -10,7 +10,7 @@
 <body>
     <div class="grain-overlay"></div>
     
-    <!-- NAVIGATION -->
+   
     <header class="header">
         <nav class="nav">
             <a href="index.html" class="logo">
@@ -23,7 +23,7 @@
                 <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
             </ul>
             <div class="nav-actions">
-                <!-- Theme Toggle -->
+                
                 <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
                     <div class="theme-toggle-icons">
                         <span class="icon-moon">🌙</span>
@@ -191,7 +191,7 @@
         </section>
     </main>
 
-    <!-- FOOTER -->
+    
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -203,7 +203,7 @@
     <!-- NOTIFICATION -->
     <div id="notification" class="notification"></div>
 
-    <!-- ADMIN LOGIN MODAL -->
+    
     <div id="adminLoginModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -233,7 +233,7 @@
         let allProducts = [];
         let filteredProducts = [];
 
-        // Mapping des produits par catégorie basé sur le nom
+      
         const categoryKeywords = {
             'smartphones': ['iphone', 'samsung', 'galaxy', 'smartphone', 'phone', 'mobile'],
             'ordinateurs': ['macbook', 'laptop', 'ordinateur', 'pc', 'computer', 'ipad', 'tablette'],
@@ -243,7 +243,7 @@
             'photo': ['canon', 'camera', 'caméra', 'drone', 'dji', 'webcam', 'photo', 'vidéo']
         };
 
-        // Fonction pour déterminer la catégorie d'un produit
+        
         function getProductCategory(product) {
             const productName = product.name.toLowerCase();
             const productDesc = (product.description || '').toLowerCase();
@@ -262,7 +262,7 @@
             await loadAllProducts();
             updateCartCount();
             
-            // Vérifier les paramètres URL pour le filtre catégorie
+            
             const urlParams = new URLSearchParams(window.location.search);
             const categoryParam = urlParams.get('category');
             if (categoryParam) {
@@ -273,12 +273,12 @@
                 }
             }
 
-            // Événements pour les filtres
+           
             document.getElementById('priceRange').addEventListener('input', function() {
                 document.getElementById('priceMax').value = this.value;
             });
 
-            // Appliquer filtres automatiquement quand on change la catégorie
+           
             document.querySelectorAll('input[name="category"]').forEach(radio => {
                 radio.addEventListener('change', applyFilters);
             });
@@ -328,17 +328,17 @@
             const inStockOnly = document.getElementById('inStockOnly').checked;
 
             filteredProducts = allProducts.filter(product => {
-                // Filtre catégorie basé sur les mots-clés
+                
                 if (categoryValue) {
                     const productCategory = getProductCategory(product);
                     if (productCategory !== categoryValue) return false;
                 }
                 
-                // Filtre prix
+                
                 const price = parseFloat(product.price);
                 if (price < priceMin || price > priceMax) return false;
                 
-                // Filtre stock
+             
                 if (inStockOnly && product.stock <= 0) return false;
                 
                 return true;
@@ -379,7 +379,7 @@
             renderProducts();
         }
 
-        // === ADMIN LOGIN FUNCTIONS ===
+       
         const ADMIN_PASSWORD = 'admin123';
 
         function openAdminLogin(e) {
