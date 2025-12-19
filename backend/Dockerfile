@@ -1,5 +1,4 @@
-# Backend Dockerfile
-# Serveur Node.js avec Express pour l'API REST
+
 
 FROM node:20-alpine
 WORKDIR /app
