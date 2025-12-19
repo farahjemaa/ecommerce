@@ -1,9 +1,4 @@
-/**
- * Backend API REST - Application E-Commerce Multi-Tier
- * 
- * Ce serveur Node.js/Express gère les opérations CRUD sur les produits
- * avec support d'upload d'images et communication avec MySQL.
- */
+
 
 const express = require('express');
 const cors = require('cors');
@@ -59,23 +54,21 @@ const upload = multer({
     }
 });
 
-// Initialisation Express
+
 const app = express();
 
-// Middleware
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir les fichiers uploadés
+
 app.use('/api/uploads', express.static(UPLOADS_DIR));
 
-// Pool de connexions MySQL
+
 let pool;
 
-// ===================================
-// CONNEXION À LA BASE DE DONNÉES
-// ===================================
+
 async function initializeDatabase() {
     let retries = 10;
     
@@ -85,12 +78,12 @@ async function initializeDatabase() {
             
             pool = mysql.createPool(DB_CONFIG);
             
-            // Test de la connexion
+            
             const connection = await pool.getConnection();
             console.log('✅ Connexion à MySQL établie avec succès!');
             connection.release();
             
-            // Création/mise à jour de la table
+            
             await createTables();
             
             return true;
@@ -110,7 +103,7 @@ async function initializeDatabase() {
 }
 
 async function createTables() {
-    // Créer la table avec le champ image_url
+    
     const createProductsTable = `
         CREATE TABLE IF NOT EXISTS products (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -126,7 +119,7 @@ async function createTables() {
     
     await pool.execute(createProductsTable);
     
-    // Vérifier si la colonne image_url existe, sinon l'ajouter
+
     try {
         await pool.execute('SELECT image_url FROM products LIMIT 1');
     } catch (error) {
@@ -138,7 +131,7 @@ async function createTables() {
     
     console.log('✅ Table "products" vérifiée/créée');
     
-    // Créer les tables pour les commandes
+   
     const createOrdersTable = `
         CREATE TABLE IF NOT EXISTS orders (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -177,11 +170,9 @@ async function createTables() {
     console.log('✅ Tables "orders" et "order_items" vérifiées/créées');
 }
 
-// ===================================
-// ROUTES API
-// ===================================
 
-// Route de santé (Health Check)
+
+
 app.get('/api/health', async (req, res) => {
     let dbStatus = 'disconnected';
     
@@ -202,7 +193,7 @@ app.get('/api/health', async (req, res) => {
     });
 });
 
-// Fonction pour formater un produit (convertir le prix en nombre)
+
 function formatProduct(product) {
     return {
         ...product,
@@ -211,7 +202,7 @@ function formatProduct(product) {
     };
 }
 
-// GET - Récupérer tous les produits
+
 app.get('/api/products', async (req, res) => {
     try {
         const [rows] = await pool.execute(
@@ -229,7 +220,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// GET - Récupérer un produit par ID
+
 app.get('/api/products/:id', async (req, res) => {
     try {
         const [rows] = await pool.execute(
@@ -241,7 +232,7 @@ app.get('/api/products/:id', async (req, res) => {
             return res.status(404).json({ error: 'Produit non trouvé' });
         }
         
-        // Convertir le prix en nombre
+       
         res.json(formatProduct(rows[0]));
     } catch (error) {
         console.error('Erreur GET /products/:id:', error);
@@ -252,19 +243,19 @@ app.get('/api/products/:id', async (req, res) => {
     }
 });
 
-// POST - Créer un nouveau produit (avec upload d'image)
+
 app.post('/api/products', upload.single('image'), async (req, res) => {
     try {
         const { name, description, price, stock, image_url } = req.body;
         
-        // Validation
+    
         if (!name || !price) {
             return res.status(400).json({ 
                 error: 'Le nom et le prix sont requis' 
             });
         }
         
-        // Déterminer l'URL de l'image
+        
         let finalImageUrl = image_url || null;
         if (req.file) {
             finalImageUrl = req.file.filename;
@@ -291,7 +282,7 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
     }
 });
 
-// PUT - Mettre à jour un produit (avec upload d'image)
+
 app.put('/api/products/:id', upload.single('image'), async (req, res) => {
     try {
         const { name, description, price, stock, image_url } = req.body;
@@ -310,7 +301,7 @@ app.put('/api/products/:id', upload.single('image'), async (req, res) => {
         // Déterminer l'URL de l'image
         let finalImageUrl = existing[0].image_url;
         if (req.file) {
-            // Supprimer l'ancienne image si elle existe et est locale
+            
             if (existing[0].image_url && !existing[0].image_url.startsWith('http')) {
                 const oldImagePath = path.join(UPLOADS_DIR, existing[0].image_url);
                 if (fs.existsSync(oldImagePath)) {
@@ -350,7 +341,7 @@ app.put('/api/products/:id', upload.single('image'), async (req, res) => {
     }
 });
 
-// DELETE - Supprimer un produit
+
 app.delete('/api/products/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -364,7 +355,7 @@ app.delete('/api/products/:id', async (req, res) => {
             return res.status(404).json({ error: 'Produit non trouvé' });
         }
         
-        // Supprimer l'image associée si elle est locale
+        
         if (existing[0].image_url && !existing[0].image_url.startsWith('http')) {
             const imagePath = path.join(UPLOADS_DIR, existing[0].image_url);
             if (fs.existsSync(imagePath)) {
@@ -402,11 +393,7 @@ app.use((error, req, res, next) => {
     next();
 });
 
-// ===================================
-// ROUTES API - COMMANDES (ORDERS)
-// ===================================
 
-// Créer les tables orders si nécessaire
 async function createOrdersTables() {
     const createOrdersTable = `
         CREATE TABLE IF NOT EXISTS orders (
@@ -446,7 +433,7 @@ async function createOrdersTables() {
     console.log('✅ Tables "orders" et "order_items" vérifiées/créées');
 }
 
-// POST - Créer une nouvelle commande
+
 app.post('/api/orders', async (req, res) => {
     try {
         const { 
@@ -463,14 +450,14 @@ app.post('/api/orders', async (req, res) => {
             total 
         } = req.body;
         
-        // Validation
+      
         if (!orderNumber || !customerName || !customerPhone || !customerAddress || !items || items.length === 0) {
             return res.status(400).json({ 
                 error: 'Informations de commande incomplètes' 
             });
         }
         
-        // Insérer la commande
+       
         const [orderResult] = await pool.execute(
             `INSERT INTO orders (order_number, customer_name, customer_phone, customer_email, customer_address, notes, payment_method, subtotal, shipping, total, status) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
@@ -479,7 +466,7 @@ app.post('/api/orders', async (req, res) => {
         
         const orderId = orderResult.insertId;
         
-        // Insérer les articles de la commande
+        
         for (const item of items) {
             await pool.execute(
                 `INSERT INTO order_items (order_id, product_id, product_name, product_price, quantity, total) 
@@ -487,7 +474,7 @@ app.post('/api/orders', async (req, res) => {
                 [orderId, item.id, item.name, item.price, item.quantity, item.price * item.quantity]
             );
             
-            // Décrémenter le stock du produit
+            
             await pool.execute(
                 'UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?',
                 [item.quantity, item.id]
@@ -510,14 +497,14 @@ app.post('/api/orders', async (req, res) => {
     }
 });
 
-// GET - Récupérer toutes les commandes
+
 app.get('/api/orders', async (req, res) => {
     try {
         const [orders] = await pool.execute(
             'SELECT * FROM orders ORDER BY created_at DESC'
         );
         
-        // Récupérer les articles pour chaque commande
+       
         for (let order of orders) {
             const [items] = await pool.execute(
                 'SELECT * FROM order_items WHERE order_id = ?',
@@ -539,7 +526,7 @@ app.get('/api/orders', async (req, res) => {
     }
 });
 
-// GET - Récupérer une commande par ID
+
 app.get('/api/orders/:id', async (req, res) => {
     try {
         const [orders] = await pool.execute(
@@ -572,7 +559,7 @@ app.get('/api/orders/:id', async (req, res) => {
     }
 });
 
-// PUT - Mettre à jour le statut d'une commande
+
 app.put('/api/orders/:id/status', async (req, res) => {
     try {
         const { status } = req.body;
@@ -612,7 +599,7 @@ app.put('/api/orders/:id/status', async (req, res) => {
     }
 });
 
-// DELETE - Supprimer une commande
+
 app.delete('/api/orders/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -642,7 +629,7 @@ app.delete('/api/orders/:id', async (req, res) => {
     }
 });
 
-// Route 404
+
 app.use((req, res) => {
     res.status(404).json({ 
         error: 'Route non trouvée',
@@ -650,9 +637,7 @@ app.use((req, res) => {
     });
 });
 
-// ===================================
-// DÉMARRAGE DU SERVEUR
-// ===================================
+
 async function startServer() {
     console.log('🚀 Démarrage du serveur Backend API...');
     console.log('====================================');
