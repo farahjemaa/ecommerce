@@ -35,30 +35,7 @@ Chaque service s'exécute dans son propre conteneur Docker, orchestré par Docke
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 📁 Structure du Projet
 
-```
-e-commerce/
-├── frontend/
-│   ├── index.html          # Page principale
-│   ├── styles.css          # Styles CSS
-│   ├── app.js              # JavaScript (communication API)
-│   ├── nginx.conf          # Configuration Nginx
-│   └── Dockerfile          # Image Docker frontend
-│
-├── backend/
-│   ├── server.js           # Serveur Express + API REST
-│   ├── package.json        # Dépendances Node.js
-│   ├── Dockerfile          # Image Docker backend
-│   └── .dockerignore       # Fichiers exclus du build
-│
-├── database/
-│   └── init.sql            # Script d'initialisation MySQL
-│
-├── docker-compose.yml      # Orchestration des services
-├── .gitignore              # Fichiers exclus de Git
-└── README.md               # Documentation
-```
 
 ## 🚀 Démarrage Rapide
 
@@ -118,31 +95,6 @@ curl -X POST http://localhost:3000/api/products \
   }'
 ```
 
-## 🐳 Commandes Docker Utiles
-
-```bash
-# Voir les logs de tous les services
-docker-compose logs -f
-
-# Voir les logs d'un service spécifique
-docker-compose logs -f backend
-
-# Arrêter tous les services
-docker-compose down
-
-# Arrêter et supprimer les volumes (reset complet)
-docker-compose down -v
-
-# Reconstruire un service spécifique
-docker-compose build backend
-
-# Voir l'état des conteneurs
-docker-compose ps
-
-# Exécuter une commande dans un conteneur
-docker-compose exec backend sh
-docker-compose exec database mysql -u root -prootpassword ecommerce
-```
 
 ## ⚙️ Configuration
 
@@ -221,17 +173,6 @@ docker-compose exec database mysql -u root -prootpassword ecommerce
 - Limitez l'exposition des ports
 - Ajoutez une authentification à l'API
 
-## 📚 Technologies Utilisées
-
-| Composant | Technologie | Version |
-|-----------|-------------|---------|
-| Frontend  | Nginx       | Alpine  |
-| Frontend  | HTML5/CSS3/JS | -     |
-| Backend   | Node.js     | 20 LTS  |
-| Backend   | Express     | 4.18    |
-| Database  | MySQL       | 8.0     |
-| Container | Docker      | 20.10+  |
-| Orchestration | Docker Compose | 2.0+ |
 
 ## 🐛 Dépannage
 
@@ -266,5 +207,5 @@ Ce projet est sous licence MIT - voir le fichier LICENSE pour plus de détails.
 
 ---
 
-**Projet réalisé dans le cadre de l'apprentissage de Docker et des architectures multi-tier.**
+
 
