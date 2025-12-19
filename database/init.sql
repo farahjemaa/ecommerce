@@ -1,20 +1,12 @@
--- ===================================
--- Script d'initialisation MySQL
--- Application E-Commerce Multi-Tier
--- Prix en Dinars Tunisiens (TND)
--- ===================================
 
--- Création de la base de données si elle n'existe pas
 CREATE DATABASE IF NOT EXISTS ecommerce
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
--- Utilisation de la base de données
+
 USE ecommerce;
 
--- ===================================
--- TABLE: products
--- ===================================
+
 CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -30,9 +22,7 @@ CREATE TABLE IF NOT EXISTS products (
     INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ===================================
--- DONNÉES DE DÉMONSTRATION (Prix en TND)
--- ===================================
+
 INSERT INTO products (name, description, price, stock, image_url) VALUES
     ('iPhone 15 Pro Max', 'Smartphone Apple avec puce A17 Pro, écran Super Retina XDR 6.7 pouces, appareil photo 48MP et Dynamic Island.', 4899.000, 15, 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500'),
     ('Samsung Galaxy S24 Ultra', 'Smartphone Samsung avec S Pen intégré, écran AMOLED 6.8 pouces, processeur Snapdragon 8 Gen 3 et appareil photo 200MP.', 4299.000, 20, 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500'),
@@ -47,9 +37,7 @@ INSERT INTO products (name, description, price, stock, image_url) VALUES
     ('DJI Mini 3 Pro', 'Drone compact avec caméra 4K HDR, détection d''obstacles tri-directionnelle et 34 min d''autonomie.', 2699.000, 15, 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=500'),
     ('Dyson V15 Detect', 'Aspirateur sans fil avec laser pour détecter la poussière, écran LCD et 60 min d''autonomie.', 2199.000, 20, 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=500');
 
--- ===================================
--- TABLE: categories
--- ===================================
+
 CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -59,7 +47,7 @@ CREATE TABLE IF NOT EXISTS categories (
     UNIQUE INDEX idx_category_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insertion des catégories
+
 INSERT INTO categories (name, description) VALUES
     ('Smartphones', 'Téléphones mobiles et accessoires'),
     ('Ordinateurs', 'Laptops, desktops et composants'),
@@ -68,9 +56,7 @@ INSERT INTO categories (name, description) VALUES
     ('Gaming', 'Consoles et accessoires gaming'),
     ('Photo & Vidéo', 'Caméras, drones et accessoires');
 
--- ===================================
--- TABLE: orders (Commandes)
--- ===================================
+
 CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_number VARCHAR(50) NOT NULL UNIQUE,
@@ -92,9 +78,7 @@ CREATE TABLE IF NOT EXISTS orders (
     INDEX idx_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ===================================
--- TABLE: order_items (Articles des commandes)
--- ===================================
+
 CREATE TABLE IF NOT EXISTS order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
@@ -109,9 +93,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     INDEX idx_order_id (order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ===================================
--- AFFICHAGE DES DONNÉES INSÉRÉES
--- ===================================
+
 SELECT 'Base de données initialisée avec succès!' AS message;
 SELECT COUNT(*) AS 'Nombre de produits' FROM products;
 SELECT COUNT(*) AS 'Nombre de catégories' FROM categories;
