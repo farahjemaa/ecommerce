@@ -10,7 +10,7 @@
 <body>
     <div class="grain-overlay"></div>
     
-    <!-- NAVIGATION -->
+    
     <header class="header">
         <nav class="nav">
             <a href="index.html" class="logo">
@@ -23,7 +23,7 @@
                 <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
             </ul>
             <div class="nav-actions">
-                <!-- Theme Toggle -->
+               
                 <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
                     <div class="theme-toggle-icons">
                         <span class="icon-moon">🌙</span>
@@ -45,7 +45,6 @@
     </header>
 
     <main class="page-content">
-        <!-- PAGE HEADER -->
         <section class="page-header">
             <div class="container">
                 <nav class="breadcrumb">
@@ -58,17 +57,15 @@
             </div>
         </section>
 
-        <!-- CART CONTENT -->
         <section class="cart-section">
             <div class="container">
                 <div class="cart-layout" id="cartContent">
-                    <!-- Chargé dynamiquement -->
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- FOOTER -->
+
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -77,10 +74,9 @@
         </div>
     </footer>
 
-    <!-- NOTIFICATION -->
     <div id="notification" class="notification"></div>
 
-    <!-- ADMIN LOGIN MODAL -->
+    
     <div id="adminLoginModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,7 +101,7 @@
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL - Formulaire de commande -->
+   
     <div id="checkoutModal" class="modal">
         <div class="modal-content modal-large">
             <div class="modal-header">
@@ -114,14 +110,14 @@
             </div>
             <div class="modal-body modal-scrollable">
                 <form id="checkoutForm" class="checkout-form">
-                    <!-- Récapitulatif -->
+                    
                     <div class="checkout-section">
                         <h3>📦 Récapitulatif de votre commande</h3>
                         <div class="checkout-items" id="checkoutItems"></div>
                         <div class="checkout-totals" id="checkoutTotals"></div>
                     </div>
 
-                    <!-- Informations client -->
+                    
                     <div class="checkout-section">
                         <h3>👤 Informations de livraison</h3>
                         <div class="form-row">
@@ -148,7 +144,7 @@
                         </div>
                     </div>
 
-                    <!-- Mode de paiement -->
+                    
                     <div class="checkout-section">
                         <h3>💳 Mode de paiement</h3>
                         <div class="payment-options">
@@ -184,7 +180,7 @@
                             </label>
                         </div>
                         
-                        <!-- Détails carte bancaire (affiché si carte sélectionnée) -->
+                        
                         <div id="cardDetails" class="payment-details" style="display: none;">
                             <div class="form-row">
                                 <div class="form-group">
@@ -204,7 +200,7 @@
                             </div>
                         </div>
 
-                        <!-- Détails virement bancaire -->
+                        
                         <div id="transferDetails" class="payment-details" style="display: none;">
                             <div class="bank-info">
                                 <p><strong>Informations bancaires:</strong></p>
@@ -226,7 +222,7 @@
         </div>
     </div>
 
-    <!-- ORDER SUCCESS MODAL -->
+    
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -293,7 +289,7 @@
             }
             
             const subtotal = Cart.getTotal();
-            // Livraison gratuite à partir de 150 TND
+            
             const shipping = subtotal > 150 ? 0 : 7.000;
             const total = subtotal + shipping;
             
@@ -438,7 +434,7 @@
                 return;
             }
             
-            // Afficher le formulaire de checkout
+            
             openCheckoutModal();
         }
 
@@ -448,7 +444,7 @@
             const shipping = subtotal > 150 ? 0 : 7.000;
             const total = subtotal + shipping;
 
-            // Remplir le récapitulatif
+          
             document.getElementById('checkoutItems').innerHTML = items.map(item => `
                 <div class="checkout-item">
                     <img src="${getCartImageUrl(item)}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/50x50?text=?'">
@@ -475,7 +471,7 @@
                 </div>
             `;
 
-            // Gérer l'affichage des détails de paiement
+            
             document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
                 input.addEventListener('change', function() {
                     document.getElementById('cardDetails').style.display = this.value === 'card' ? 'block' : 'none';
@@ -493,7 +489,7 @@
         async function confirmOrder() {
             const form = document.getElementById('checkoutForm');
             
-            // Validation
+            
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
             const email = document.getElementById('customerEmail').value.trim();
@@ -506,16 +502,16 @@
                 return;
             }
 
-            // Générer le numéro de commande
+
             const orderNumber = 'ORD-' + Date.now().toString(36).toUpperCase();
             
-            // Calculer les totaux
+            
             const items = Cart.getItems();
             const subtotal = Cart.getTotal();
             const shipping = subtotal > 150 ? 0 : 7.000;
             const total = subtotal + shipping;
 
-            // Envoyer la commande au serveur
+            
             try {
                 const response = await fetch('/api/orders', {
                     method: 'POST',
@@ -561,14 +557,14 @@
                     </div>
                 `;
 
-                // Fermer le modal de checkout
+               
                 closeCheckoutModal();
                 
-                // Vider le panier
+                
                 Cart.clear();
                 updateCartCount();
                 
-                // Afficher le modal de succès
+               
                 document.getElementById('orderModal').classList.add('show');
                 
             } catch (error) {
@@ -587,7 +583,7 @@
             window.location.href = 'products.html';
         }
 
-        // === ADMIN LOGIN FUNCTIONS ===
+       
         const ADMIN_PASSWORD = 'admin123';
 
         function openAdminLogin(e) {
