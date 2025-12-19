@@ -10,7 +10,7 @@
 <body>
     <div class="grain-overlay"></div>
     
-    <!-- NAVIGATION -->
+
     <header class="header">
         <nav class="nav">
             <a href="index.html" class="logo">
@@ -23,7 +23,7 @@
                 <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
             </ul>
             <div class="nav-actions">
-                <!-- Theme Toggle -->
+                
                 <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
                     <div class="theme-toggle-icons">
                         <span class="icon-moon">🌙</span>
@@ -45,7 +45,7 @@
     </header>
 
     <main class="page-content">
-        <!-- PAGE HEADER -->
+       
         <section class="page-header page-header-small">
             <div class="container">
                 <nav class="breadcrumb">
@@ -58,7 +58,7 @@
             </div>
         </section>
 
-        <!-- PRODUCT DETAIL -->
+       
         <section class="product-detail-section">
             <div class="container">
                 <div class="product-detail" id="productDetail">
@@ -70,20 +70,20 @@
             </div>
         </section>
 
-        <!-- RELATED PRODUCTS -->
+      
         <section class="related-products-section">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Produits similaires</h2>
                 </div>
                 <div class="products-grid" id="relatedProducts">
-                    <!-- Chargé dynamiquement -->
+                   
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- FOOTER -->
+   
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -92,10 +92,10 @@
         </div>
     </footer>
 
-    <!-- NOTIFICATION -->
+ 
     <div id="notification" class="notification"></div>
 
-    <!-- ADMIN LOGIN MODAL -->
+    
     <div id="adminLoginModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -291,7 +291,7 @@
             window.location.href = 'cart.html';
         }
 
-        // === ADMIN LOGIN FUNCTIONS ===
+       
         const ADMIN_PASSWORD = 'admin123';
 
         function openAdminLogin(e) {
