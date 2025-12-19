@@ -10,9 +10,7 @@
 <body>
     <div class="grain-overlay"></div>
 
-    <!-- CONTENU ADMIN -->
     
-    <!-- NAVIGATION -->
     <header class="header">
         <nav class="nav">
             <a href="index.html" class="logo">
@@ -50,7 +48,7 @@
     </header>
 
     <main class="page-content">
-        <!-- PAGE HEADER -->
+       
         <section class="page-header">
             <div class="container">
                 <nav class="breadcrumb">
@@ -63,10 +61,10 @@
             </div>
         </section>
 
-        <!-- ADMIN CONTENT -->
+       
         <section class="admin-section">
             <div class="container">
-                <!-- STATS CARDS - PRODUCTS -->
+                
                 <div class="admin-stats" id="productStats">
                     <div class="stat-card">
                         <div class="stat-icon">📦</div>
@@ -98,7 +96,7 @@
                     </div>
                 </div>
 
-                <!-- STATS CARDS - ORDERS -->
+               
                 <div class="admin-stats" id="orderStats" style="display: none;">
                     <div class="stat-card">
                         <div class="stat-icon">🛒</div>
@@ -130,7 +128,7 @@
                     </div>
                 </div>
 
-                <!-- TABS NAVIGATION -->
+                
                 <div class="admin-tabs">
                     <button class="admin-tab active" onclick="switchTab('products')">
                         📦 Produits
@@ -140,10 +138,10 @@
                     </button>
                 </div>
 
-                <!-- PRODUCTS TAB CONTENT -->
+               
                 <div class="admin-tab-content active" id="productsTab">
                 <div class="admin-layout">
-                    <!-- ADD PRODUCT FORM -->
+                   
                     <div class="admin-form-section">
                         <div class="admin-card">
                             <div class="admin-card-header">
@@ -178,7 +176,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- IMAGE UPLOAD -->
+                                    
                                     <div class="form-group">
                                         <label>Image du produit</label>
                                         <div class="image-upload-container">
@@ -222,7 +220,6 @@
                             </div>
                         </div>
 
-                        <!-- API STATUS -->
                         <div class="admin-card">
                             <div class="admin-card-header">
                                 <h2>
@@ -258,7 +255,6 @@
                         </div>
                     </div>
 
-                    <!-- PRODUCTS LIST -->
                     <div class="admin-products-section">
                         <div class="admin-card">
                             <div class="admin-card-header">
@@ -300,7 +296,6 @@
                 </div>
                 </div>
 
-                <!-- ORDERS TAB CONTENT -->
                 <div class="admin-tab-content" id="ordersTab">
                     <div class="admin-card">
                         <div class="admin-card-header">
@@ -356,7 +351,7 @@
         </section>
     </main>
 
-    <!-- FOOTER -->
+   
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -365,10 +360,9 @@
         </div>
     </footer>
 
-    <!-- NOTIFICATION -->
+    
     <div id="notification" class="notification"></div>
 
-    <!-- EDIT MODAL -->
     <div id="editModal" class="modal">
         <div class="modal-content modal-large">
             <div class="modal-header">
@@ -396,7 +390,7 @@
                             <input type="number" id="editStock" min="0" required>
                         </div>
                     </div>
-                    <!-- IMAGE EDIT -->
+                   
                     <div class="form-group">
                         <label>Image du produit</label>
                         <div class="image-upload-container">
@@ -431,7 +425,6 @@
         </div>
     </div>
 
-    <!-- ORDER DETAILS MODAL -->
     <div id="orderDetailModal" class="modal">
         <div class="modal-content modal-large">
             <div class="modal-header">
@@ -439,7 +432,6 @@
                 <button class="modal-close" onclick="closeOrderDetailModal()">×</button>
             </div>
             <div class="modal-body modal-scrollable" id="orderDetailContent">
-                <!-- Contenu chargé dynamiquement -->
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeOrderDetailModal()">Fermer</button>
@@ -452,13 +444,11 @@
         let allProducts = [];
         let allOrders = [];
 
-        // Vérifier l'authentification au chargement de la page
+        
         document.addEventListener('DOMContentLoaded', () => {
-            // Vérifier si l'utilisateur est authentifié
             const isAuthenticated = sessionStorage.getItem('adminAuthenticated') === 'true';
             
             if (!isAuthenticated) {
-                // Pas authentifié -> rediriger vers l'accueil
                 showNotification('⚠️ Veuillez vous connecter pour accéder à l\'administration', 'error');
                 setTimeout(() => {
                     window.location.href = 'index.html';
@@ -466,11 +456,11 @@
                 return;
             }
             
-            // Authentifié -> initialiser l'admin
+            
             initAdmin();
         });
 
-        // Initialiser la page admin
+        
         async function initAdmin() {
             updateCartCount();
             await loadProducts();
@@ -480,17 +470,17 @@
             showNotification('✅ Bienvenue dans l\'espace admin!', 'success');
         }
 
-        // Switch between tabs
+        
         function switchTab(tab) {
-            // Update tab buttons
+            
             document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.admin-tab[onclick="switchTab('${tab}')"]`).classList.add('active');
             
-            // Update tab content
+            
             document.querySelectorAll('.admin-tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tab + 'Tab').classList.add('active');
             
-            // Show/hide stats based on tab
+           
             if (tab === 'products') {
                 document.getElementById('productStats').style.display = 'grid';
                 document.getElementById('orderStats').style.display = 'none';
@@ -500,7 +490,7 @@
             }
         }
 
-        // ===== ORDERS MANAGEMENT =====
+        
         async function loadOrders() {
             try {
                 const response = await fetch('/api/orders');
@@ -778,7 +768,6 @@
             }
         }
 
-        // Déconnexion
         function logout() {
             sessionStorage.removeItem('adminAuthenticated');
             showNotification('🔒 Déconnecté avec succès', 'success');
@@ -787,7 +776,6 @@
             }, 500);
         }
 
-        // Preview image from file input
         function previewImage(input) {
             const preview = document.getElementById('imagePreview');
             if (input.files && input.files[0]) {
@@ -801,17 +789,16 @@
             }
         }
 
-        // Preview image from URL
         function previewImageUrl(url) {
             const preview = document.getElementById('imagePreview');
             if (url) {
                 preview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='<span class=\\'preview-placeholder\\'>❌ URL invalide</span>'">`;
-                // Clear file input
+                
                 document.getElementById('productImage').value = '';
             }
         }
 
-        // Preview image for edit modal
+        
         function previewEditImage(input) {
             const preview = document.getElementById('editImagePreview');
             if (input.files && input.files[0]) {
@@ -824,7 +811,7 @@
             }
         }
 
-        // Reset image preview
+        
         function resetImagePreview() {
             document.getElementById('imagePreview').innerHTML = '<span class="preview-placeholder">📷 Aperçu de l\'image</span>';
         }
@@ -955,7 +942,7 @@
             document.getElementById('editStock').value = product.stock;
             document.getElementById('editImageUrl').value = product.image_url || '';
             
-            // Show current image
+
             const preview = document.getElementById('editImagePreview');
             if (product.image_url) {
                 const imageUrl = getImageUrl(product);
