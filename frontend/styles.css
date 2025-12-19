@@ -1,6 +1,4 @@
-/* ===================================
-   VARIABLES & DESIGN TOKENS
-   =================================== */
+
 :root {
     /* Mode Sombre (par défaut) */
     --color-bg-dark: #0d0d0d;
@@ -23,11 +21,11 @@
     --color-warning: #fbbf24;
     --color-error: #f87171;
     
-    /* Typographie */
+    
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Montserrat', -apple-system, sans-serif;
     
-    /* Espacements */
+    
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -36,25 +34,25 @@
     --spacing-2xl: 3rem;
     --spacing-3xl: 4rem;
     
-    /* Rayons */
+    
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 16px;
     --radius-xl: 24px;
     
-    /* Transitions */
+    
     --transition-fast: 150ms ease;
     --transition-base: 300ms ease;
     --transition-slow: 500ms ease;
     
-    /* Ombres */
+    
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
     --shadow-glow: 0 0 40px rgba(201, 162, 39, 0.2);
 }
 
-/* Mode Clair */
+
 [data-theme="light"] {
     --color-bg-dark: #f8f9fa;
     --color-bg-medium: #ffffff;
@@ -75,15 +73,13 @@
     --shadow-glow: 0 0 40px rgba(201, 162, 39, 0.15);
 }
 
-/* Transition fluide pour le changement de thème */
+
 body, .header, .footer, .product-card, .modal-content, 
 .admin-card, .filter-section, .cart-item, .btn {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* ===================================
-   RESET & BASE
-   =================================== */
+
 *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -108,7 +104,7 @@ a {
     color: inherit;
 }
 
-/* Texture grain overlay */
+
 .grain-overlay {
     position: fixed;
     top: 0;
@@ -127,9 +123,7 @@ a {
     padding: 0 var(--spacing-xl);
 }
 
-/* ===================================
-   HEADER & NAVIGATION
-   =================================== */
+
 .header {
     position: fixed;
     top: 0;
@@ -248,9 +242,7 @@ a {
     justify-content: center;
 }
 
-/* ===================================
-   BUTTONS
-   =================================== */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -333,9 +325,7 @@ a {
     background: var(--color-success);
 }
 
-/* ===================================
-   HERO SECTION
-   =================================== */
+
 .hero {
     min-height: 100vh;
     display: flex;
@@ -468,9 +458,7 @@ a {
     letter-spacing: 0.1em;
 }
 
-/* ===================================
-   SECTIONS
-   =================================== */
+
 .page-content {
     padding-top: 80px;
 }
@@ -511,9 +499,7 @@ a {
     margin-top: var(--spacing-3xl);
 }
 
-/* ===================================
-   PAGE HEADER
-   =================================== */
+
 .page-header {
     padding: var(--spacing-3xl) 0;
     background: linear-gradient(180deg, var(--color-bg-medium) 0%, var(--color-bg-dark) 100%);
@@ -554,9 +540,7 @@ a {
     font-size: 1.125rem;
 }
 
-/* ===================================
-   CATEGORIES
-   =================================== */
+
 .categories-section {
     padding: var(--spacing-3xl) 0;
 }
@@ -601,17 +585,13 @@ a {
     color: var(--color-text-muted);
 }
 
-/* ===================================
-   FEATURED SECTION
-   =================================== */
+
 .featured-section,
 .related-products-section {
     padding: var(--spacing-3xl) 0;
 }
 
-/* ===================================
-   PRODUCTS GRID
-   =================================== */
+
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -661,7 +641,7 @@ a {
     font-size: 4rem;
 }
 
-/* Image Upload Styles */
+
 .image-upload-container {
     display: flex;
     gap: var(--spacing-lg);
@@ -719,7 +699,7 @@ a {
     color: var(--color-text-muted);
 }
 
-/* Table Image */
+
 .table-image {
     width: 60px;
     height: 60px;
@@ -740,7 +720,7 @@ a {
     font-size: 0.75rem;
 }
 
-/* Modal Large */
+
 .modal-large {
     max-width: 600px;
 }
@@ -818,9 +798,7 @@ a {
     flex: 1;
 }
 
-/* ===================================
-   PRODUCTS PAGE
-   =================================== */
+
 .products-page-section {
     padding: var(--spacing-3xl) 0;
 }
@@ -993,9 +971,7 @@ a {
     cursor: pointer;
 }
 
-/* ===================================
-   PRODUCT DETAIL PAGE
-   =================================== */
+
 .product-detail-section {
     padding: var(--spacing-2xl) 0;
 }
@@ -1266,9 +1242,7 @@ a {
     margin-bottom: var(--spacing-xs);
 }
 
-/* ===================================
-   CART PAGE
-   =================================== */
+
 .cart-section {
     padding: var(--spacing-3xl) 0;
 }
@@ -1493,9 +1467,7 @@ a {
     color: var(--color-text-primary);
 }
 
-/* ===================================
-   ADMIN PAGE
-   =================================== */
+
 .admin-section {
     padding: var(--spacing-3xl) 0;
 }
@@ -1507,7 +1479,7 @@ a {
     margin-bottom: var(--spacing-xl);
 }
 
-/* Admin Tabs */
+
 .admin-tabs {
     display: flex;
     gap: var(--spacing-sm);
@@ -1806,9 +1778,7 @@ a {
     color: var(--color-error);
 }
 
-/* ===================================
-   ORDERS MANAGEMENT
-   =================================== */
+
 .admin-filters {
     display: flex;
     gap: var(--spacing-md);
@@ -1905,7 +1875,7 @@ a {
     color: var(--color-primary);
 }
 
-/* Order Detail Modal */
+
 .order-detail {
     display: flex;
     flex-direction: column;
@@ -2054,9 +2024,7 @@ a {
     padding-top: var(--spacing-md);
 }
 
-/* ===================================
-   FEATURES SECTION
-   =================================== */
+
 .features-section {
     padding: var(--spacing-3xl) 0;
     background: var(--color-bg-medium);
@@ -2089,9 +2057,7 @@ a {
     color: var(--color-text-muted);
 }
 
-/* ===================================
-   NEWSLETTER
-   =================================== */
+
 .newsletter-section {
     padding: var(--spacing-3xl) 0;
 }
@@ -2128,9 +2094,7 @@ a {
     font-size: 1rem;
 }
 
-/* ===================================
-   FOOTER
-   =================================== */
+
 .footer {
     padding: var(--spacing-3xl) 0 var(--spacing-xl);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -2198,9 +2162,7 @@ a {
     font-size: 0.875rem;
 }
 
-/* ===================================
-   MODAL
-   =================================== */
+
 .modal {
     position: fixed;
     inset: 0;
@@ -2301,9 +2263,7 @@ a {
     border-radius: var(--radius-md);
 }
 
-/* ===================================
-   NOTIFICATIONS
-   =================================== */
+
 .notification {
     position: fixed;
     bottom: var(--spacing-xl);
@@ -2332,9 +2292,7 @@ a {
     border-left-color: var(--color-error);
 }
 
-/* ===================================
-   LOADING & EMPTY STATES
-   =================================== */
+
 .loading-state {
     grid-column: 1 / -1;
     display: flex;
@@ -2381,9 +2339,7 @@ a {
     margin-bottom: var(--spacing-xl);
 }
 
-/* ===================================
-   ANIMATIONS
-   =================================== */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -2401,9 +2357,7 @@ a {
     }
 }
 
-/* ===================================
-   RESPONSIVE
-   =================================== */
+
 @media (max-width: 1200px) {
     .admin-layout {
         grid-template-columns: 1fr;
@@ -2534,9 +2488,7 @@ a {
     }
 }
 
-/* ===================================
-   CHECKOUT FORM STYLES
-   =================================== */
+
 .modal-scrollable {
     max-height: 60vh;
     overflow-y: auto;
@@ -2643,7 +2595,7 @@ a {
     padding-top: var(--spacing-sm);
 }
 
-/* Payment Options */
+
 .payment-options {
     display: flex;
     flex-direction: column;
@@ -2722,7 +2674,7 @@ a {
     color: var(--color-primary);
 }
 
-/* Order Details */
+
 .order-details {
     margin-top: var(--spacing-lg);
     text-align: left;
@@ -2743,9 +2695,7 @@ a {
     color: var(--color-text-primary);
 }
 
-/* ===================================
-   ADMIN LOGIN OVERLAY
-   =================================== */
+
 .admin-login-overlay {
     position: fixed;
     inset: 0;
@@ -2829,9 +2779,7 @@ a {
     font-size: 0.8rem;
 }
 
-/* ===================================
-   MODAL LARGE SCROLLABLE FIX
-   =================================== */
+
 .modal-large {
     max-width: 650px;
     max-height: 90vh;
@@ -2858,9 +2806,7 @@ a {
     border-radius: 3px;
 }
 
-/* ===================================
-   THEME TOGGLE BUTTON
-   =================================== */
+
 .theme-toggle {
     position: relative;
     width: 50px;
@@ -2922,14 +2868,14 @@ a {
     opacity: 1;
 }
 
-/* Nav actions avec theme toggle */
+
 .nav-actions {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
 }
 
-/* Light mode specific adjustments */
+
 [data-theme="light"] .grain-overlay {
     opacity: 0.015;
 }
