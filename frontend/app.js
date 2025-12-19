@@ -1,16 +1,7 @@
-/**
- * Application E-Commerce Multi-Tier
- * JavaScript Principal - API, Panier et Utilitaires
- */
 
-// ===================================
-// CONFIGURATION
-// ===================================
 const API_URL = '/api';
 
-// ===================================
-// API SERVICE
-// ===================================
+
 const API = {
     async getProducts() {
         const response = await fetch(`${API_URL}/products`);
@@ -56,9 +47,7 @@ const API = {
     }
 };
 
-// ===================================
-// CART MANAGEMENT (LocalStorage)
-// ===================================
+
 const Cart = {
     STORAGE_KEY: 'elegance_cart',
     
@@ -124,11 +113,8 @@ const Cart = {
     }
 };
 
-// ===================================
-// UI UTILITIES
-// ===================================
 function formatPrice(price) {
-    // Format en Dinars Tunisiens (TND)
+    
     return new Intl.NumberFormat('fr-TN', {
         style: 'currency',
         currency: 'TND',
@@ -165,23 +151,16 @@ function updateCartCount() {
     }
 }
 
-// Fonction pour obtenir l'URL de l'image
 function getImageUrl(product) {
     if (product.image_url) {
-        // Si l'image commence par http, c'est une URL externe
         if (product.image_url.startsWith('http')) {
             return product.image_url;
         }
-        // Sinon c'est une image uploadée
         return `/api/uploads/${product.image_url}`;
     }
-    // Image par défaut si pas d'image
     return 'https://via.placeholder.com/300x300?text=Pas+d%27image';
 }
 
-// ===================================
-// PRODUCT CARD COMPONENT
-// ===================================
 function createProductCard(product) {
     const imageUrl = getImageUrl(product);
     
@@ -223,10 +202,6 @@ function createProductCard(product) {
         </article>
     `;
 }
-
-// ===================================
-// CART ACTIONS
-// ===================================
 async function addToCart(event, productId) {
     event.preventDefault();
     event.stopPropagation();
@@ -256,25 +231,22 @@ async function addToCart(event, productId) {
     }
 }
 
-// ===================================
-// THEME MANAGEMENT
-// ===================================
 const Theme = {
     STORAGE_KEY: 'elegance_theme',
     
     init() {
-        // Charger le thème sauvegardé ou utiliser la préférence système
+
         const savedTheme = localStorage.getItem(this.STORAGE_KEY);
         
         if (savedTheme) {
             this.setTheme(savedTheme, false);
         } else {
-            // Détecter la préférence système
+           
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             this.setTheme(prefersDark ? 'dark' : 'light', false);
         }
         
-        // Écouter les changements de préférence système
+       
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem(this.STORAGE_KEY)) {
                 this.setTheme(e.matches ? 'dark' : 'light', false);
@@ -294,7 +266,7 @@ const Theme = {
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         this.setTheme(newTheme);
         
-        // Notification du changement
+        
         const themeLabel = newTheme === 'dark' ? '🌙 Mode sombre' : '☀️ Mode clair';
         showNotification(`${themeLabel} activé`, 'success');
     },
@@ -308,16 +280,13 @@ function toggleTheme() {
     Theme.toggle();
 }
 
-// ===================================
-// INITIALIZE ON ALL PAGES
-// ===================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialiser le thème
+    
     Theme.init();
     
     updateCartCount();
     
-    // Smooth scroll pour les ancres
+    
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -329,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Expose global functions
+
 window.addToCart = addToCart;
 window.API = API;
 window.Cart = Cart;
