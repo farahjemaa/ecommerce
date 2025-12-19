@@ -1,5 +1,4 @@
-# Frontend Dockerfile
-# Utilise Nginx pour servir les fichiers statiques
+
 
 FROM nginx:alpine
 
