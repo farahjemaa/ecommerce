@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉLÉGANCE | Boutique en ligne - Tunisie</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    
+    <!-- NAVIGATION -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">ÉLÉGANCE</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Accueil</a></li>
+                <li><a href="products.html">Produits</a></li>
+                <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
+                    <div class="theme-toggle-icons">
+                        <span class="icon-moon">🌙</span>
+                        <span class="icon-sun">☀️</span>
+                    </div>
+                    <span class="theme-toggle-slider"></span>
+                </button>
+                
+                <a href="cart.html" class="cart-btn" id="cartBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-bg">
+                <div class="hero-shape shape-1"></div>
+                <div class="hero-shape shape-2"></div>
+                <div class="hero-shape shape-3"></div>
+            </div>
+            <div class="hero-content">
+                <span class="hero-tag">Nouvelle Collection 2025</span>
+                <h1 class="hero-title">
+                    L'Excellence<br>
+                    <span class="highlight">Technologique</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Découvrez notre sélection exclusive de produits high-tech en Tunisie. 
+                    Qualité premium, design élégant, performance exceptionnelle.
+                </p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary">
+                        <span>Voir la collection</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <a href="#featured" class="btn btn-secondary">
+                        <span>Produits vedettes</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Produits</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Clients</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4.9★</span>
+                    <span class="stat-label">Avis</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES SECTION -->
+        <section class="categories-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Explorer</span>
+                    <h2 class="section-title">Nos Catégories</h2>
+                </div>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Catégories chargées dynamiquement -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURED PRODUCTS -->
+        <section id="featured" class="featured-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Sélection</span>
+                    <h2 class="section-title">Produits Vedettes</h2>
+                    <p class="section-subtitle">Nos meilleures ventes du moment</p>
+                </div>
+                <div class="products-grid" id="featuredProducts">
+                    <div class="loading-state">
+                        <div class="loader"></div>
+                        <p>Chargement des produits...</p>
+                    </div>
+                </div>
+                <div class="section-footer">
+                    <a href="products.html" class="btn btn-outline">
+                        <span>Voir tous les produits</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🚚</div>
+                        <h3>Livraison Gratuite</h3>
+                        <p>Pour toute commande supérieure à 150 TND</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Paiement Sécurisé</h3>
+                        <p>Transactions 100% sécurisées</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">↩️</div>
+                        <h3>Retours Faciles</h3>
+                        <p>14 jours pour changer d'avis</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Support 7j/7</h3>
+                        <p>Assistance à tout moment</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEWSLETTER -->
+        <section class="newsletter-section">
+            <div class="container">
+                <div class="newsletter-content">
+                    <h2>Restez Informé</h2>
+                    <p>Inscrivez-vous pour recevoir nos offres exclusives</p>
+                    <form class="newsletter-form" onsubmit="return subscribeNewsletter(event)">
+                        <input type="email" placeholder="Votre adresse email" required>
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">◆</span>
+                        <span class="logo-text">ÉLÉGANCE</span>
+                    </div>
+                    <p>Votre destination premium pour la technologie de pointe en Tunisie.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Docker</span>
+                        <span class="tech-badge">Node.js</span>
+                        <span class="tech-badge">MySQL</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="products.html">Produits</a></li>
+                        <li><a href="cart.html">Panier</a></li>
+                        <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Catégories</h4>
+                    <ul id="footerCategories">
+                        <li><a href="products.html?category=smartphones">Smartphones</a></li>
+                        <li><a href="products.html?category=ordinateurs">Ordinateurs</a></li>
+                        <li><a href="products.html?category=audio">Audio</a></li>
+                        <li><a href="products.html?category=gaming">Gaming</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>📍 Tunis, Tunisie</li>
+                        <li>📧 contact@elegance.tn</li>
+                        <li>📞 +216 71 234 567</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ÉLÉGANCE. tout droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICATION -->
+    <div id="notification" class="notification"></div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Accès Administration</h2>
+                <button class="modal-close" onclick="closeAdminLogin()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+                    Veuillez entrer le mot de passe pour accéder au panneau d'administration.
+                </p>
+                <form onsubmit="return checkAdminPassword(event)" class="login-form" style="max-width: 300px; margin: 0 auto;">
+                    <input type="password" id="adminPasswordInput" placeholder="Mot de passe" autocomplete="off" autofocus>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        🔓 Accéder
+                    </button>
+                    <p id="loginErrorMsg" class="login-error">❌ Mot de passe incorrect</p>
+                </form>
+                <p style="text-align: center; color: var(--color-text-muted); font-size: 0.8rem; margin-top: 1.5rem;">
+                    💡 Indice: <strong>admin123</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Page d'accueil - Charger les produits vedettes
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadFeaturedProducts();
+            loadCategories();
+            updateCartCount();
+        });
+
+        async function loadFeaturedProducts() {
+            const container = document.getElementById('featuredProducts');
+            try {
+                const products = await API.getProducts();
+                // Afficher les 6 premiers produits
+                const featured = products.slice(0, 6);
+                
+                if (featured.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📦</div>
+                            <h3>Aucun produit disponible</h3>
+                            <p>Revenez bientôt pour découvrir nos nouveautés!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = featured.map(product => createProductCard(product)).join('');
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Erreur de connexion</h3>
+                        <p>Impossible de charger les produits.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function loadCategories() {
+            const categories = [
+                { id: 'smartphones', name: 'Smartphones', icon: '📱', count: 2 },
+                { id: 'ordinateurs', name: 'Ordinateurs', icon: '💻', count: 2 },
+                { id: 'audio', name: 'Audio', icon: '🎧', count: 2 },
+                { id: 'wearables', name: 'Wearables', icon: '⌚', count: 2 },
+                { id: 'gaming', name: 'Gaming', icon: '🎮', count: 2 },
+                { id: 'photo', name: 'Photo & Vidéo', icon: '📷', count: 2 }
+            ];
+
+            const container = document.getElementById('categoriesGrid');
+            container.innerHTML = categories.map(cat => `
+                <a href="products.html?category=${cat.id}" class="category-card">
+                    <span class="category-icon">${cat.icon}</span>
+                    <h3>${cat.name}</h3>
+                    <span class="category-count">${cat.count} produits</span>
+                </a>
+            `).join('');
+        }
+
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            showNotification('Merci pour votre inscription!', 'success');
+            e.target.reset();
+            return false;
+        }
+
+        // === ADMIN LOGIN FUNCTIONS ===
+        const ADMIN_PASSWORD = 'admin123';
+
+        function openAdminLogin(e) {
+            e.preventDefault();
+            document.getElementById('adminLoginModal').classList.add('show');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminPasswordInput').focus();
+            document.getElementById('loginErrorMsg').classList.remove('show');
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLoginModal').classList.remove('show');
+        }
+
+        function checkAdminPassword(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPasswordInput').value;
+            const errorEl = document.getElementById('loginErrorMsg');
+            
+            if (password === ADMIN_PASSWORD) {
+                // Stocker l'authentification et rediriger vers admin
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                errorEl.classList.add('show');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('adminPasswordInput').focus();
+                setTimeout(() => errorEl.classList.remove('show'), 3000);
+            }
+            return false;
+        }
+
+        // Fermer le modal avec Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeAdminLogin();
+        });
+    </script>
+</body>
+</html>

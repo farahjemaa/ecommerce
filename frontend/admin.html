@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration | ÉLÉGANCE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+
+    <!-- CONTENU ADMIN -->
+    
+    <!-- NAVIGATION -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">ÉLÉGANCE</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="products.html">Produits</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
+                    <div class="theme-toggle-icons">
+                        <span class="icon-moon">🌙</span>
+                        <span class="icon-sun">☀️</span>
+                    </div>
+                    <span class="theme-toggle-slider"></span>
+                </button>
+                
+                <button class="btn btn-outline btn-sm" onclick="logout()" title="Déconnexion">
+                    🔒 Déconnexion
+                </button>
+                <a href="cart.html" class="cart-btn" id="cartBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <!-- PAGE HEADER -->
+        <section class="page-header">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Accueil</a>
+                    <span>/</span>
+                    <span>Administration</span>
+                </nav>
+                <h1 class="page-title">Panneau d'Administration</h1>
+                <p class="page-subtitle">Gérez vos produits et votre catalogue</p>
+            </div>
+        </section>
+
+        <!-- ADMIN CONTENT -->
+        <section class="admin-section">
+            <div class="container">
+                <!-- STATS CARDS - PRODUCTS -->
+                <div class="admin-stats" id="productStats">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalProducts">0</span>
+                            <span class="stat-label">Produits</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalValue">0 TND</span>
+                            <span class="stat-label">Valeur stock</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="lowStock">0</span>
+                            <span class="stat-label">Stock faible</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚫</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="outOfStock">0</span>
+                            <span class="stat-label">Rupture</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATS CARDS - ORDERS -->
+                <div class="admin-stats" id="orderStats" style="display: none;">
+                    <div class="stat-card">
+                        <div class="stat-icon">🛒</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalOrders">0</span>
+                            <span class="stat-label">Commandes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="pendingOrders">0</span>
+                            <span class="stat-label">En attente</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="deliveredOrders">0</span>
+                            <span class="stat-label">Livrées</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalRevenue">0 TND</span>
+                            <span class="stat-label">Revenus</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABS NAVIGATION -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="switchTab('products')">
+                        📦 Produits
+                    </button>
+                    <button class="admin-tab" onclick="switchTab('orders')">
+                        🛒 Commandes
+                    </button>
+                </div>
+
+                <!-- PRODUCTS TAB CONTENT -->
+                <div class="admin-tab-content active" id="productsTab">
+                <div class="admin-layout">
+                    <!-- ADD PRODUCT FORM -->
+                    <div class="admin-form-section">
+                        <div class="admin-card">
+                            <div class="admin-card-header">
+                                <h2>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Ajouter un produit
+                                </h2>
+                            </div>
+                            <div class="admin-card-body">
+                                <form id="productForm" class="admin-form" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="productName">Nom du produit *</label>
+                                        <input type="text" id="productName" name="name" placeholder="Ex: iPhone 15 Pro" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="productDescription">Description</label>
+                                        <textarea id="productDescription" name="description" rows="4" placeholder="Description détaillée du produit..."></textarea>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="productPrice">Prix (TND) *</label>
+                                            <input type="number" id="productPrice" name="price" step="0.001" min="0" placeholder="999.000" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productStock">Stock *</label>
+                                            <input type="number" id="productStock" name="stock" min="0" placeholder="50" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- IMAGE UPLOAD -->
+                                    <div class="form-group">
+                                        <label>Image du produit</label>
+                                        <div class="image-upload-container">
+                                            <div class="image-preview" id="imagePreview">
+                                                <span class="preview-placeholder">📷 Aperçu de l'image</span>
+                                            </div>
+                                            <div class="image-upload-options">
+                                                <div class="upload-option">
+                                                    <label for="productImage" class="btn btn-outline btn-full">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                                        </svg>
+                                                        <span>Uploader une image</span>
+                                                    </label>
+                                                    <input type="file" id="productImage" name="image" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                                                </div>
+                                                <div class="upload-divider">ou</div>
+                                                <div class="upload-option">
+                                                    <input type="url" id="productImageUrl" name="image_url" placeholder="URL de l'image (https://...)" onchange="previewImageUrl(this.value)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <small class="form-hint">Formats acceptés: JPG, PNG, GIF, WebP (max 5MB)</small>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary btn-full">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                            <span>Ajouter le produit</span>
+                                        </button>
+                                        <button type="reset" class="btn btn-outline btn-full" onclick="resetImagePreview()">
+                                            Réinitialiser
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- API STATUS -->
+                        <div class="admin-card">
+                            <div class="admin-card-header">
+                                <h2>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    État des services
+                                </h2>
+                            </div>
+                            <div class="admin-card-body">
+                                <div class="service-status">
+                                    <div class="service-item">
+                                        <span class="service-name">🖥️ Frontend (Nginx)</span>
+                                        <span class="service-badge online">En ligne</span>
+                                    </div>
+                                    <div class="service-item">
+                                        <span class="service-name">⚙️ Backend (Node.js)</span>
+                                        <span class="service-badge" id="backendStatus">Vérification...</span>
+                                    </div>
+                                    <div class="service-item">
+                                        <span class="service-name">🗄️ Database (MySQL)</span>
+                                        <span class="service-badge" id="databaseStatus">Vérification...</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline btn-full" onclick="checkHealth()" style="margin-top: 15px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M23 4v6h-6"></path>
+                                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                    </svg>
+                                    Rafraîchir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTS LIST -->
+                    <div class="admin-products-section">
+                        <div class="admin-card">
+                            <div class="admin-card-header">
+                                <h2>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    </svg>
+                                    Liste des produits
+                                </h2>
+                                <div class="admin-search">
+                                    <input type="text" id="searchInput" placeholder="Rechercher..." oninput="filterProducts()">
+                                </div>
+                            </div>
+                            <div class="admin-card-body">
+                                <div class="admin-table-container">
+                                    <table class="admin-table" id="productsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Nom</th>
+                                                <th>Prix</th>
+                                                <th>Stock</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productsTableBody">
+                                            <tr>
+                                                <td colspan="5" class="table-loading">
+                                                    <div class="loader"></div>
+                                                    <p>Chargement des produits...</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- ORDERS TAB CONTENT -->
+                <div class="admin-tab-content" id="ordersTab">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h2>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                                Gestion des commandes
+                            </h2>
+                            <div class="admin-filters">
+                                <select id="orderStatusFilter" onchange="filterOrders()">
+                                    <option value="all">Tous les statuts</option>
+                                    <option value="pending">⏳ En attente</option>
+                                    <option value="confirmed">✅ Confirmée</option>
+                                    <option value="processing">🔄 En préparation</option>
+                                    <option value="shipped">🚚 Expédiée</option>
+                                    <option value="delivered">📦 Livrée</option>
+                                    <option value="cancelled">❌ Annulée</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="admin-table-container">
+                                <table class="admin-table" id="ordersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>N° Commande</th>
+                                            <th>Client</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                            <th>Paiement</th>
+                                            <th>Statut</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersTableBody">
+                                        <tr>
+                                            <td colspan="7" class="table-loading">
+                                                <div class="loader"></div>
+                                                <p>Chargement des commandes...</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 ÉLÉGANCE. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICATION -->
+    <div id="notification" class="notification"></div>
+
+    <!-- EDIT MODAL -->
+    <div id="editModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Modifier le produit</h2>
+                <button class="modal-close" onclick="closeEditModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" class="admin-form" enctype="multipart/form-data">
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label for="editName">Nom du produit *</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Description</label>
+                        <textarea id="editDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editPrice">Prix (TND) *</label>
+                            <input type="number" id="editPrice" step="0.001" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editStock">Stock *</label>
+                            <input type="number" id="editStock" min="0" required>
+                        </div>
+                    </div>
+                    <!-- IMAGE EDIT -->
+                    <div class="form-group">
+                        <label>Image du produit</label>
+                        <div class="image-upload-container">
+                            <div class="image-preview" id="editImagePreview">
+                                <span class="preview-placeholder">📷 Aperçu de l'image</span>
+                            </div>
+                            <div class="image-upload-options">
+                                <div class="upload-option">
+                                    <label for="editImage" class="btn btn-outline btn-full">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        <span>Changer l'image</span>
+                                    </label>
+                                    <input type="file" id="editImage" name="image" accept="image/*" style="display: none;" onchange="previewEditImage(this)">
+                                </div>
+                                <div class="upload-divider">ou</div>
+                                <div class="upload-option">
+                                    <input type="url" id="editImageUrl" name="image_url" placeholder="URL de l'image (https://...)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeEditModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveEdit()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER DETAILS MODAL -->
+    <div id="orderDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>📋 Détails de la commande</h2>
+                <button class="modal-close" onclick="closeOrderDetailModal()">×</button>
+            </div>
+            <div class="modal-body modal-scrollable" id="orderDetailContent">
+                <!-- Contenu chargé dynamiquement -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeOrderDetailModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let allProducts = [];
+        let allOrders = [];
+
+        // Vérifier l'authentification au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Vérifier si l'utilisateur est authentifié
+            const isAuthenticated = sessionStorage.getItem('adminAuthenticated') === 'true';
+            
+            if (!isAuthenticated) {
+                // Pas authentifié -> rediriger vers l'accueil
+                showNotification('⚠️ Veuillez vous connecter pour accéder à l\'administration', 'error');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+                return;
+            }
+            
+            // Authentifié -> initialiser l'admin
+            initAdmin();
+        });
+
+        // Initialiser la page admin
+        async function initAdmin() {
+            updateCartCount();
+            await loadProducts();
+            await loadOrders();
+            await checkHealth();
+            setupForm();
+            showNotification('✅ Bienvenue dans l\'espace admin!', 'success');
+        }
+
+        // Switch between tabs
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.admin-tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.admin-tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            // Show/hide stats based on tab
+            if (tab === 'products') {
+                document.getElementById('productStats').style.display = 'grid';
+                document.getElementById('orderStats').style.display = 'none';
+            } else {
+                document.getElementById('productStats').style.display = 'none';
+                document.getElementById('orderStats').style.display = 'grid';
+            }
+        }
+
+        // ===== ORDERS MANAGEMENT =====
+        async function loadOrders() {
+            try {
+                const response = await fetch('/api/orders');
+                if (!response.ok) throw new Error('Erreur');
+                allOrders = await response.json();
+                renderOrdersTable(allOrders);
+                updateOrderStats(allOrders);
+            } catch (error) {
+                console.error('Erreur chargement commandes:', error);
+                document.getElementById('ordersTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="table-empty">
+                            <p>Aucune commande trouvée</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function renderOrdersTable(orders) {
+            const tbody = document.getElementById('ordersTableBody');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="table-empty">
+                            <p>Aucune commande trouvée</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            const statusLabels = {
+                'pending': { label: '⏳ En attente', class: 'status-pending' },
+                'confirmed': { label: '✅ Confirmée', class: 'status-confirmed' },
+                'processing': { label: '🔄 Préparation', class: 'status-processing' },
+                'shipped': { label: '🚚 Expédiée', class: 'status-shipped' },
+                'delivered': { label: '📦 Livrée', class: 'status-delivered' },
+                'cancelled': { label: '❌ Annulée', class: 'status-cancelled' }
+            };
+            
+            const paymentLabels = {
+                'cash': '💵 Espèces',
+                'card': '💳 Carte',
+                'transfer': '🏦 Virement'
+            };
+            
+            tbody.innerHTML = orders.map(order => {
+                const status = statusLabels[order.status] || statusLabels['pending'];
+                const payment = paymentLabels[order.payment_method] || order.payment_method;
+                const date = new Date(order.created_at).toLocaleDateString('fr-TN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                    <tr data-id="${order.id}">
+                        <td>
+                            <strong class="order-number">${order.order_number}</strong>
+                        </td>
+                        <td>
+                            <div class="customer-cell">
+                                <strong>${escapeHtml(order.customer_name)}</strong>
+                                <small>${escapeHtml(order.customer_phone)}</small>
+                            </div>
+                        </td>
+                        <td><small>${date}</small></td>
+                        <td><span class="order-total">${formatPrice(order.total)}</span></td>
+                        <td><span class="payment-badge">${payment}</span></td>
+                        <td>
+                            <select class="status-select ${status.class}" onchange="updateOrderStatus(${order.id}, this.value)">
+                                <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>⏳ En attente</option>
+                                <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>✅ Confirmée</option>
+                                <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>🔄 Préparation</option>
+                                <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>🚚 Expédiée</option>
+                                <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>📦 Livrée</option>
+                                <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>❌ Annulée</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-icon btn-view" onclick="viewOrderDetails(${order.id})" title="Voir détails">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteOrder(${order.id})" title="Supprimer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateOrderStats(orders) {
+            const totalOrders = orders.length;
+            const pendingOrders = orders.filter(o => o.status === 'pending').length;
+            const deliveredOrdersList = orders.filter(o => o.status === 'delivered');
+            const deliveredCount = deliveredOrdersList.length;
+            const totalRevenue = deliveredOrdersList.reduce((sum, o) => sum + o.total, 0);
+            
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('pendingOrders').textContent = pendingOrders;
+            document.getElementById('deliveredOrders').textContent = deliveredCount;
+            document.getElementById('totalRevenue').textContent = formatPrice(totalRevenue);
+        }
+
+        function filterOrders() {
+            const status = document.getElementById('orderStatusFilter').value;
+            const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status);
+            renderOrdersTable(filtered);
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const response = await fetch(`/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                if (!response.ok) throw new Error('Erreur');
+                
+                showNotification('Statut mis à jour!', 'success');
+                await loadOrders();
+            } catch (error) {
+                showNotification('Erreur lors de la mise à jour', 'error');
+            }
+        }
+
+        function viewOrderDetails(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            const statusLabels = {
+                'pending': '⏳ En attente',
+                'confirmed': '✅ Confirmée',
+                'processing': '🔄 En préparation',
+                'shipped': '🚚 Expédiée',
+                'delivered': '📦 Livrée',
+                'cancelled': '❌ Annulée'
+            };
+            
+            const paymentLabels = {
+                'cash': '💵 Paiement à la livraison',
+                'card': '💳 Carte bancaire',
+                'transfer': '🏦 Virement bancaire'
+            };
+            
+            const date = new Date(order.created_at).toLocaleDateString('fr-TN', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            document.getElementById('orderDetailContent').innerHTML = `
+                <div class="order-detail">
+                    <div class="order-detail-header">
+                        <div class="order-detail-info">
+                            <h3>${order.order_number}</h3>
+                            <p class="order-date">📅 ${date}</p>
+                            <span class="status-badge ${order.status}">${statusLabels[order.status]}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-detail-section">
+                        <h4>👤 Informations client</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <label>Nom:</label>
+                                <span>${escapeHtml(order.customer_name)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Téléphone:</label>
+                                <span>${escapeHtml(order.customer_phone)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Email:</label>
+                                <span>${order.customer_email ? escapeHtml(order.customer_email) : '-'}</span>
+                            </div>
+                            <div class="detail-item full-width">
+                                <label>Adresse:</label>
+                                <span>${escapeHtml(order.customer_address)}</span>
+                            </div>
+                            ${order.notes ? `
+                            <div class="detail-item full-width">
+                                <label>Notes:</label>
+                                <span>${escapeHtml(order.notes)}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="order-detail-section">
+                        <h4>📦 Articles commandés</h4>
+                        <table class="order-items-table">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantité</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${order.items.map(item => `
+                                    <tr>
+                                        <td>${escapeHtml(item.product_name)}</td>
+                                        <td>${formatPrice(parseFloat(item.product_price))}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${formatPrice(parseFloat(item.total))}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="order-detail-section">
+                        <h4>💳 Paiement & Total</h4>
+                        <div class="order-totals">
+                            <div class="total-line">
+                                <span>Mode de paiement:</span>
+                                <span>${paymentLabels[order.payment_method]}</span>
+                            </div>
+                            <div class="total-line">
+                                <span>Sous-total:</span>
+                                <span>${formatPrice(order.subtotal)}</span>
+                            </div>
+                            <div class="total-line">
+                                <span>Livraison:</span>
+                                <span>${order.shipping === 0 ? 'Gratuite' : formatPrice(order.shipping)}</span>
+                            </div>
+                            <div class="total-line total-final">
+                                <span>Total:</span>
+                                <span>${formatPrice(order.total)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('orderDetailModal').classList.add('show');
+        }
+
+        function closeOrderDetailModal() {
+            document.getElementById('orderDetailModal').classList.remove('show');
+        }
+
+        async function deleteOrder(orderId) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette commande?')) return;
+            
+            try {
+                const response = await fetch(`/api/orders/${orderId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) throw new Error('Erreur');
+                
+                showNotification('Commande supprimée!', 'success');
+                await loadOrders();
+            } catch (error) {
+                showNotification('Erreur lors de la suppression', 'error');
+            }
+        }
+
+        // Déconnexion
+        function logout() {
+            sessionStorage.removeItem('adminAuthenticated');
+            showNotification('🔒 Déconnecté avec succès', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+        }
+
+        // Preview image from file input
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(input.files[0]);
+                // Clear URL input
+                document.getElementById('productImageUrl').value = '';
+            }
+        }
+
+        // Preview image from URL
+        function previewImageUrl(url) {
+            const preview = document.getElementById('imagePreview');
+            if (url) {
+                preview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='<span class=\\'preview-placeholder\\'>❌ URL invalide</span>'">`;
+                // Clear file input
+                document.getElementById('productImage').value = '';
+            }
+        }
+
+        // Preview image for edit modal
+        function previewEditImage(input) {
+            const preview = document.getElementById('editImagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(input.files[0]);
+                document.getElementById('editImageUrl').value = '';
+            }
+        }
+
+        // Reset image preview
+        function resetImagePreview() {
+            document.getElementById('imagePreview').innerHTML = '<span class="preview-placeholder">📷 Aperçu de l\'image</span>';
+        }
+
+        async function loadProducts() {
+            try {
+                allProducts = await API.getProducts();
+                renderProductsTable(allProducts);
+                updateStats(allProducts);
+            } catch (error) {
+                document.getElementById('productsTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="5" class="table-error">
+                            <p>⚠️ Erreur de chargement des produits</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function renderProductsTable(products) {
+            const tbody = document.getElementById('productsTableBody');
+            
+            if (products.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="table-empty">
+                            <p>Aucun produit trouvé</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = products.map(product => {
+                const stockClass = product.stock > 10 ? 'stock-ok' : product.stock > 0 ? 'stock-low' : 'stock-out';
+                const imageUrl = getImageUrl(product);
+                
+                return `
+                    <tr data-id="${product.id}">
+                        <td>
+                            <div class="table-image">
+                                <img src="${imageUrl}" alt="${escapeHtml(product.name)}" onerror="this.src='https://via.placeholder.com/60x60?text=?'">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="product-cell">
+                                <strong>${escapeHtml(product.name)}</strong>
+                                <small>#${product.id}</small>
+                            </div>
+                        </td>
+                        <td><span class="product-price">${formatPrice(product.price)}</span></td>
+                        <td><span class="stock-badge ${stockClass}">${product.stock}</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-icon btn-edit" onclick="editProduct(${product.id})" title="Modifier">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteProduct(${product.id})" title="Supprimer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateStats(products) {
+            const totalProducts = products.length;
+            const totalValue = products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+            const lowStock = products.filter(p => p.stock > 0 && p.stock <= 10).length;
+            const outOfStock = products.filter(p => p.stock === 0).length;
+            
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('totalValue').textContent = formatPrice(totalValue);
+            document.getElementById('lowStock').textContent = lowStock;
+            document.getElementById('outOfStock').textContent = outOfStock;
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allProducts.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.description?.toLowerCase().includes(query)
+            );
+            renderProductsTable(filtered);
+        }
+
+        function setupForm() {
+            document.getElementById('productForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                
+                try {
+                    const response = await fetch('/api/products', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) throw new Error('Erreur');
+                    
+                    showNotification('Produit ajouté avec succès!', 'success');
+                    e.target.reset();
+                    resetImagePreview();
+                    await loadProducts();
+                } catch (error) {
+                    showNotification('Erreur lors de l\'ajout du produit', 'error');
+                }
+            });
+        }
+
+        function editProduct(id) {
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
+            
+            document.getElementById('editId').value = product.id;
+            document.getElementById('editName').value = product.name;
+            document.getElementById('editDescription').value = product.description || '';
+            document.getElementById('editPrice').value = product.price;
+            document.getElementById('editStock').value = product.stock;
+            document.getElementById('editImageUrl').value = product.image_url || '';
+            
+            // Show current image
+            const preview = document.getElementById('editImagePreview');
+            if (product.image_url) {
+                const imageUrl = getImageUrl(product);
+                preview.innerHTML = `<img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span class=\\'preview-placeholder\\'>📷 Pas d\\'image</span>'">`;
+            } else {
+                preview.innerHTML = '<span class="preview-placeholder">📷 Pas d\'image</span>';
+            }
+            
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        async function saveEdit() {
+            const id = document.getElementById('editId').value;
+            const formData = new FormData();
+            
+            formData.append('name', document.getElementById('editName').value);
+            formData.append('description', document.getElementById('editDescription').value);
+            formData.append('price', document.getElementById('editPrice').value);
+            formData.append('stock', document.getElementById('editStock').value);
+            
+            const imageFile = document.getElementById('editImage').files[0];
+            const imageUrl = document.getElementById('editImageUrl').value;
+            
+            if (imageFile) {
+                formData.append('image', imageFile);
+            } else if (imageUrl) {
+                formData.append('image_url', imageUrl);
+            }
+            
+            try {
+                const response = await fetch(`/api/products/${id}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+                
+                if (!response.ok) throw new Error('Erreur');
+                
+                showNotification('Produit mis à jour!', 'success');
+                closeEditModal();
+                await loadProducts();
+            } catch (error) {
+                showNotification('Erreur lors de la mise à jour', 'error');
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce produit?')) return;
+            
+            try {
+                await API.deleteProduct(id);
+                showNotification('Produit supprimé!', 'success');
+                await loadProducts();
+            } catch (error) {
+                showNotification('Erreur lors de la suppression', 'error');
+            }
+        }
+
+        async function checkHealth() {
+            const backendEl = document.getElementById('backendStatus');
+            const databaseEl = document.getElementById('databaseStatus');
+            
+            try {
+                const health = await API.checkHealth();
+                
+                backendEl.textContent = 'En ligne';
+                backendEl.className = 'service-badge online';
+                
+                databaseEl.textContent = health.database === 'connected' ? 'Connecté' : 'Déconnecté';
+                databaseEl.className = `service-badge ${health.database === 'connected' ? 'online' : 'offline'}`;
+            } catch (error) {
+                backendEl.textContent = 'Hors ligne';
+                backendEl.className = 'service-badge offline';
+                databaseEl.textContent = 'Inconnu';
+                databaseEl.className = 'service-badge offline';
+            }
+        }
+    </script>
+</body>
+</html>
+

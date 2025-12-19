@@ -1,0 +1,68 @@
+
+version: '3.3'
+
+services:
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+
+  
+  # SERVICE 2: BACKEND (API REST)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ecommerce-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=database
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=ecommerce
+    depends_on:
+      - database
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+
+  # SERVICE 3: BASE DE DONNÉES
+  database:
+    image: mysql:8.0
+    container_name: ecommerce-database
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=ecommerce
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - ecommerce-network
+    restart: unless-stopped
+
+# RÉSEAUX
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Produit | ÉLÉGANCE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    
+    <!-- NAVIGATION -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">ÉLÉGANCE</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="products.html">Produits</a></li>
+                <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
+                    <div class="theme-toggle-icons">
+                        <span class="icon-moon">🌙</span>
+                        <span class="icon-sun">☀️</span>
+                    </div>
+                    <span class="theme-toggle-slider"></span>
+                </button>
+                
+                <a href="cart.html" class="cart-btn" id="cartBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <!-- PAGE HEADER -->
+        <section class="page-header page-header-small">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Accueil</a>
+                    <span>/</span>
+                    <a href="products.html">Produits</a>
+                    <span>/</span>
+                    <span id="breadcrumbProduct">Chargement...</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- PRODUCT DETAIL -->
+        <section class="product-detail-section">
+            <div class="container">
+                <div class="product-detail" id="productDetail">
+                    <div class="loading-state">
+                        <div class="loader"></div>
+                        <p>Chargement du produit...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RELATED PRODUCTS -->
+        <section class="related-products-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Produits similaires</h2>
+                </div>
+                <div class="products-grid" id="relatedProducts">
+                    <!-- Chargé dynamiquement -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 ÉLÉGANCE. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICATION -->
+    <div id="notification" class="notification"></div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Accès Administration</h2>
+                <button class="modal-close" onclick="closeAdminLogin()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+                    Veuillez entrer le mot de passe pour accéder au panneau d'administration.
+                </p>
+                <form onsubmit="return checkAdminPassword(event)" class="login-form" style="max-width: 300px; margin: 0 auto;">
+                    <input type="password" id="adminPasswordInput" placeholder="Mot de passe" autocomplete="off">
+                    <button type="submit" class="btn btn-primary btn-full">
+                        🔓 Accéder
+                    </button>
+                    <p id="loginErrorMsg" class="login-error">❌ Mot de passe incorrect</p>
+                </form>
+                <p style="text-align: center; color: var(--color-text-muted); font-size: 0.8rem; margin-top: 1.5rem;">
+                    💡 Indice: <strong>admin123</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let currentProduct = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateCartCount();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                await loadProductDetail(productId);
+                await loadRelatedProducts(productId);
+            } else {
+                showError('Produit non spécifié');
+            }
+        });
+
+        async function loadProductDetail(id) {
+            const container = document.getElementById('productDetail');
+            const breadcrumb = document.getElementById('breadcrumbProduct');
+            
+            try {
+                currentProduct = await API.getProduct(id);
+                breadcrumb.textContent = currentProduct.name;
+                document.title = `${currentProduct.name} | ÉLÉGANCE`;
+                
+                const imageUrl = getImageUrl(currentProduct);
+                
+                const stockClass = currentProduct.stock > 10 ? 'in-stock' : 
+                                   currentProduct.stock > 0 ? 'low-stock' : 'out-of-stock';
+                const stockText = currentProduct.stock > 10 ? `${currentProduct.stock} en stock` : 
+                                  currentProduct.stock > 0 ? `Plus que ${currentProduct.stock} restants` : 'Rupture de stock';
+                
+                container.innerHTML = `
+                    <div class="product-detail-grid">
+                        <div class="product-detail-image">
+                            <div class="product-image-main">
+                                <img src="${imageUrl}" alt="${escapeHtml(currentProduct.name)}" onerror="this.src='https://via.placeholder.com/500x500?text=Image+non+disponible'">
+                                ${currentProduct.stock <= 0 ? '<div class="out-of-stock-overlay"><span>Rupture de stock</span></div>' : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="product-detail-info">
+                            <div class="product-badges">
+                                <span class="badge badge-new">Nouveau</span>
+                                <span class="badge ${stockClass}">${stockText}</span>
+                            </div>
+                            
+                            <h1 class="product-detail-name">${escapeHtml(currentProduct.name)}</h1>
+                            
+                            <div class="product-detail-rating">
+                                <div class="stars">★★★★★</div>
+                                <span class="rating-count">(${Math.floor(Math.random() * 100) + 10} avis)</span>
+                            </div>
+                            
+                            <div class="product-detail-price">
+                                <span class="current-price">${formatPrice(currentProduct.price)}</span>
+                                <span class="original-price">${formatPrice(currentProduct.price * 1.2)}</span>
+                                <span class="discount-badge">-20%</span>
+                            </div>
+                            
+                            <div class="product-detail-description">
+                                <h3>Description</h3>
+                                <p>${escapeHtml(currentProduct.description) || 'Aucune description disponible pour ce produit.'}</p>
+                            </div>
+                            
+                            <div class="product-detail-features">
+                                <h3>Avantages</h3>
+                                <ul class="features-list">
+                                    <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Garantie 2 ans</li>
+                                    <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Livraison gratuite en Tunisie</li>
+                                    <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Retours sous 14 jours</li>
+                                    <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Service client 7j/7</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="product-detail-quantity">
+                                <label>Quantité:</label>
+                                <div class="quantity-selector">
+                                    <button type="button" class="qty-btn" onclick="changeQuantity(-1)">-</button>
+                                    <input type="number" id="quantity" value="1" min="1" max="${currentProduct.stock}">
+                                    <button type="button" class="qty-btn" onclick="changeQuantity(1)">+</button>
+                                </div>
+                            </div>
+                            
+                            <div class="product-detail-actions">
+                                <button class="btn btn-primary btn-lg" onclick="addProductToCart()" ${currentProduct.stock <= 0 ? 'disabled' : ''}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+                                    <span>Ajouter au panier</span>
+                                </button>
+                                <button class="btn btn-outline btn-lg" onclick="buyNow()" ${currentProduct.stock <= 0 ? 'disabled' : ''}>
+                                    <span>Acheter maintenant</span>
+                                </button>
+                            </div>
+                            
+                            <div class="product-detail-meta">
+                                <p><strong>Référence:</strong> PROD-${String(currentProduct.id).padStart(5, '0')}</p>
+                                <p><strong>Ajouté le:</strong> ${new Date(currentProduct.created_at).toLocaleDateString('fr-FR')}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                showError('Produit non trouvé');
+            }
+        }
+
+        async function loadRelatedProducts(currentId) {
+            const container = document.getElementById('relatedProducts');
+            
+            try {
+                const products = await API.getProducts();
+                const related = products
+                    .filter(p => p.id !== parseInt(currentId))
+                    .slice(0, 4);
+                
+                if (related.length > 0) {
+                    container.innerHTML = related.map(product => createProductCard(product)).join('');
+                } else {
+                    container.innerHTML = '<p class="no-related">Aucun produit similaire trouvé.</p>';
+                }
+            } catch (error) {
+                container.innerHTML = '<p class="no-related">Impossible de charger les produits similaires.</p>';
+            }
+        }
+
+        function showError(message) {
+            const container = document.getElementById('productDetail');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">❌</div>
+                    <h3>${message}</h3>
+                    <p>Le produit que vous recherchez n'existe pas ou a été supprimé.</p>
+                    <a href="products.html" class="btn btn-primary">Voir tous les produits</a>
+                </div>
+            `;
+        }
+
+        function changeQuantity(delta) {
+            const input = document.getElementById('quantity');
+            const newValue = parseInt(input.value) + delta;
+            const max = currentProduct ? currentProduct.stock : 99;
+            
+            if (newValue >= 1 && newValue <= max) {
+                input.value = newValue;
+            }
+        }
+
+        function addProductToCart() {
+            if (!currentProduct) return;
+            
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            
+            for (let i = 0; i < quantity; i++) {
+                Cart.addItem(currentProduct);
+            }
+            
+            updateCartCount();
+            showNotification(`${quantity}x ${currentProduct.name} ajouté(s) au panier!`, 'success');
+        }
+
+        function buyNow() {
+            addProductToCart();
+            window.location.href = 'cart.html';
+        }
+
+        // === ADMIN LOGIN FUNCTIONS ===
+        const ADMIN_PASSWORD = 'admin123';
+
+        function openAdminLogin(e) {
+            e.preventDefault();
+            document.getElementById('adminLoginModal').classList.add('show');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminPasswordInput').focus();
+            document.getElementById('loginErrorMsg').classList.remove('show');
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLoginModal').classList.remove('show');
+        }
+
+        function checkAdminPassword(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPasswordInput').value;
+            const errorEl = document.getElementById('loginErrorMsg');
+            
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                errorEl.classList.add('show');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('adminPasswordInput').focus();
+                setTimeout(() => errorEl.classList.remove('show'), 3000);
+            }
+            return false;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeAdminLogin();
+        });
+    </script>
+</body>
+</html>

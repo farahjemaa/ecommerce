@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier | ÉLÉGANCE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    
+    <!-- NAVIGATION -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">ÉLÉGANCE</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="products.html">Produits</a></li>
+                <li><a href="#" onclick="openAdminLogin(event)">Admin</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
+                    <div class="theme-toggle-icons">
+                        <span class="icon-moon">🌙</span>
+                        <span class="icon-sun">☀️</span>
+                    </div>
+                    <span class="theme-toggle-slider"></span>
+                </button>
+                
+                <a href="cart.html" class="cart-btn active" id="cartBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <!-- PAGE HEADER -->
+        <section class="page-header">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Accueil</a>
+                    <span>/</span>
+                    <span>Panier</span>
+                </nav>
+                <h1 class="page-title">Votre Panier</h1>
+                <p class="page-subtitle" id="cartSubtitle">0 articles</p>
+            </div>
+        </section>
+
+        <!-- CART CONTENT -->
+        <section class="cart-section">
+            <div class="container">
+                <div class="cart-layout" id="cartContent">
+                    <!-- Chargé dynamiquement -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 ÉLÉGANCE. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICATION -->
+    <div id="notification" class="notification"></div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Accès Administration</h2>
+                <button class="modal-close" onclick="closeAdminLogin()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 1.5rem;">
+                    Veuillez entrer le mot de passe pour accéder au panneau d'administration.
+                </p>
+                <form onsubmit="return checkAdminPassword(event)" class="login-form" style="max-width: 300px; margin: 0 auto;">
+                    <input type="password" id="adminPasswordInput" placeholder="Mot de passe" autocomplete="off">
+                    <button type="submit" class="btn btn-primary btn-full">
+                        🔓 Accéder
+                    </button>
+                    <p id="loginErrorMsg" class="login-error">❌ Mot de passe incorrect</p>
+                </form>
+                <p style="text-align: center; color: var(--color-text-muted); font-size: 0.8rem; margin-top: 1.5rem;">
+                    💡 Indice: <strong>admin123</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL - Formulaire de commande -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>🛒 Finaliser la commande</h2>
+                <button class="modal-close" onclick="closeCheckoutModal()">×</button>
+            </div>
+            <div class="modal-body modal-scrollable">
+                <form id="checkoutForm" class="checkout-form">
+                    <!-- Récapitulatif -->
+                    <div class="checkout-section">
+                        <h3>📦 Récapitulatif de votre commande</h3>
+                        <div class="checkout-items" id="checkoutItems"></div>
+                        <div class="checkout-totals" id="checkoutTotals"></div>
+                    </div>
+
+                    <!-- Informations client -->
+                    <div class="checkout-section">
+                        <h3>👤 Informations de livraison</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerName">Nom complet *</label>
+                                <input type="text" id="customerName" required placeholder="Mohamed Ben Ali">
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone">Téléphone *</label>
+                                <input type="tel" id="customerPhone" required placeholder="+216 XX XXX XXX">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerEmail">Email</label>
+                            <input type="email" id="customerEmail" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="customerAddress">Adresse de livraison *</label>
+                            <textarea id="customerAddress" required rows="2" placeholder="Rue, Ville, Code postal..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderNotes">Notes (optionnel)</label>
+                            <textarea id="orderNotes" rows="2" placeholder="Instructions spéciales pour la livraison..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Mode de paiement -->
+                    <div class="checkout-section">
+                        <h3>💳 Mode de paiement</h3>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="cash" checked>
+                                <div class="payment-option-content">
+                                    <span class="payment-icon">💵</span>
+                                    <div class="payment-info">
+                                        <strong>Paiement à la livraison</strong>
+                                        <small>Payez en espèces lors de la réception</small>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="card">
+                                <div class="payment-option-content">
+                                    <span class="payment-icon">💳</span>
+                                    <div class="payment-info">
+                                        <strong>Carte bancaire</strong>
+                                        <small>Visa, Mastercard, E-Dinar</small>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="transfer">
+                                <div class="payment-option-content">
+                                    <span class="payment-icon">🏦</span>
+                                    <div class="payment-info">
+                                        <strong>Virement bancaire</strong>
+                                        <small>BIAT, STB, BNA, Attijari...</small>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <!-- Détails carte bancaire (affiché si carte sélectionnée) -->
+                        <div id="cardDetails" class="payment-details" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardNumber">Numéro de carte</label>
+                                    <input type="text" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardExpiry">Date d'expiration</label>
+                                    <input type="text" id="cardExpiry" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardCvv">CVV</label>
+                                    <input type="text" id="cardCvv" placeholder="XXX" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Détails virement bancaire -->
+                        <div id="transferDetails" class="payment-details" style="display: none;">
+                            <div class="bank-info">
+                                <p><strong>Informations bancaires:</strong></p>
+                                <p>Banque: BIAT</p>
+                                <p>RIB: 08 XXX XXXXXXXX XX</p>
+                                <p>Bénéficiaire: ÉLÉGANCE SARL</p>
+                                <small>Envoyez-nous le reçu de virement par email.</small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeCheckoutModal()">Annuler</button>
+                <button class="btn btn-primary btn-lg" onclick="confirmOrder()">
+                    <span>✅ Confirmer la commande</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER SUCCESS MODAL -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Commande confirmée</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="order-success">
+                    <div class="success-icon">✅</div>
+                    <h3>Merci pour votre commande!</h3>
+                    <p>Votre commande a été enregistrée avec succès.</p>
+                    <p class="order-number">Numéro de commande: <strong id="orderNumber">-</strong></p>
+                    <div class="order-details" id="orderDetails"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModalAndRedirect()">Continuer mes achats</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+            updateCartCount();
+        });
+
+        function getCartImageUrl(item) {
+            if (item.image_url) {
+                if (item.image_url.startsWith('http')) {
+                    return item.image_url;
+                }
+                return `/api/uploads/${item.image_url}`;
+            }
+            return 'https://via.placeholder.com/80x80?text=?';
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cartContent');
+            const subtitle = document.getElementById('cartSubtitle');
+            const items = Cart.getItems();
+            
+            const itemCount = Cart.getItemCount();
+            subtitle.textContent = `${itemCount} article${itemCount > 1 ? 's' : ''}`;
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="cart-empty">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🛒</div>
+                            <h3>Votre panier est vide</h3>
+                            <p>Découvrez notre collection et ajoutez des produits à votre panier.</p>
+                            <a href="products.html" class="btn btn-primary">
+                                <span>Voir les produits</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const subtotal = Cart.getTotal();
+            // Livraison gratuite à partir de 150 TND
+            const shipping = subtotal > 150 ? 0 : 7.000;
+            const total = subtotal + shipping;
+            
+            container.innerHTML = `
+                <div class="cart-items">
+                    <div class="cart-items-header">
+                        <span>Produit</span>
+                        <span>Prix</span>
+                        <span>Quantité</span>
+                        <span>Total</span>
+                        <span></span>
+                    </div>
+                    ${items.map(item => {
+                        const imageUrl = getCartImageUrl(item);
+                        return `
+                            <div class="cart-item" data-id="${item.id}">
+                                <div class="cart-item-product">
+                                    <div class="cart-item-image">
+                                        <img src="${imageUrl}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/80x80?text=?'">
+                                    </div>
+                                    <div class="cart-item-info">
+                                        <h4 class="cart-item-name">${escapeHtml(item.name)}</h4>
+                                        <p class="cart-item-ref">Réf: PROD-${String(item.id).padStart(5, '0')}</p>
+                                    </div>
+                                </div>
+                                <div class="cart-item-price">${formatPrice(item.price)}</div>
+                                <div class="cart-item-quantity">
+                                    <div class="quantity-selector">
+                                        <button type="button" class="qty-btn" onclick="updateItemQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                                        <input type="number" value="${item.quantity}" min="1" onchange="updateItemQuantity(${item.id}, this.value)">
+                                        <button type="button" class="qty-btn" onclick="updateItemQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                                    </div>
+                                </div>
+                                <div class="cart-item-total">${formatPrice(item.price * item.quantity)}</div>
+                                <div class="cart-item-remove">
+                                    <button class="btn-remove" onclick="removeItem(${item.id})" title="Supprimer">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="summary-card">
+                        <h3 class="summary-title">Récapitulatif</h3>
+                        
+                        <div class="summary-line">
+                            <span>Sous-total</span>
+                            <span>${formatPrice(subtotal)}</span>
+                        </div>
+                        
+                        <div class="summary-line">
+                            <span>Livraison</span>
+                            <span>${shipping === 0 ? '<span class="free-shipping">Gratuite</span>' : formatPrice(shipping)}</span>
+                        </div>
+                        
+                        ${shipping > 0 ? `
+                            <div class="shipping-notice">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 16v-4M12 8h.01"></path>
+                                </svg>
+                                <span>Plus que ${formatPrice(150 - subtotal)} pour la livraison gratuite!</span>
+                            </div>
+                        ` : `
+                            <div class="shipping-notice success">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 6L9 17l-5-5"></path>
+                                </svg>
+                                <span>Félicitations! Livraison gratuite!</span>
+                            </div>
+                        `}
+                        
+                        <div class="summary-divider"></div>
+                        
+                        <div class="summary-line summary-total">
+                            <span>Total</span>
+                            <span>${formatPrice(total)}</span>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-full btn-lg" onclick="checkout()">
+                            <span>Commander</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                        
+                        <a href="products.html" class="btn btn-outline btn-full">
+                            Continuer mes achats
+                        </a>
+                        
+                        <div class="payment-methods">
+                            <p>Paiements acceptés</p>
+                            <div class="payment-icons">
+                                <span>💳</span>
+                                <span>🏦</span>
+                                <span>💵</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="promo-code-card">
+                        <h4>Code promo</h4>
+                        <div class="promo-input">
+                            <input type="text" placeholder="Entrez votre code">
+                            <button class="btn btn-outline">Appliquer</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateItemQuantity(productId, newQuantity) {
+            newQuantity = parseInt(newQuantity);
+            
+            if (newQuantity < 1) {
+                removeItem(productId);
+                return;
+            }
+            
+            Cart.updateQuantity(productId, newQuantity);
+            renderCart();
+            updateCartCount();
+        }
+
+        function removeItem(productId) {
+            Cart.removeItem(productId);
+            renderCart();
+            updateCartCount();
+            showNotification('Produit retiré du panier', 'success');
+        }
+
+        function checkout() {
+            const items = Cart.getItems();
+            if (items.length === 0) {
+                showNotification('Votre panier est vide', 'error');
+                return;
+            }
+            
+            // Afficher le formulaire de checkout
+            openCheckoutModal();
+        }
+
+        function openCheckoutModal() {
+            const items = Cart.getItems();
+            const subtotal = Cart.getTotal();
+            const shipping = subtotal > 150 ? 0 : 7.000;
+            const total = subtotal + shipping;
+
+            // Remplir le récapitulatif
+            document.getElementById('checkoutItems').innerHTML = items.map(item => `
+                <div class="checkout-item">
+                    <img src="${getCartImageUrl(item)}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/50x50?text=?'">
+                    <div class="checkout-item-info">
+                        <span class="checkout-item-name">${escapeHtml(item.name)}</span>
+                        <span class="checkout-item-qty">Qté: ${item.quantity}</span>
+                    </div>
+                    <span class="checkout-item-price">${formatPrice(item.price * item.quantity)}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('checkoutTotals').innerHTML = `
+                <div class="checkout-total-line">
+                    <span>Sous-total:</span>
+                    <span>${formatPrice(subtotal)}</span>
+                </div>
+                <div class="checkout-total-line">
+                    <span>Livraison:</span>
+                    <span>${shipping === 0 ? 'Gratuite' : formatPrice(shipping)}</span>
+                </div>
+                <div class="checkout-total-line total">
+                    <span>Total à payer:</span>
+                    <span>${formatPrice(total)}</span>
+                </div>
+            `;
+
+            // Gérer l'affichage des détails de paiement
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
+                input.addEventListener('change', function() {
+                    document.getElementById('cardDetails').style.display = this.value === 'card' ? 'block' : 'none';
+                    document.getElementById('transferDetails').style.display = this.value === 'transfer' ? 'block' : 'none';
+                });
+            });
+
+            document.getElementById('checkoutModal').classList.add('show');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('show');
+        }
+
+        async function confirmOrder() {
+            const form = document.getElementById('checkoutForm');
+            
+            // Validation
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            const notes = document.getElementById('orderNotes').value.trim();
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            if (!name || !phone || !address) {
+                showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+
+            // Générer le numéro de commande
+            const orderNumber = 'ORD-' + Date.now().toString(36).toUpperCase();
+            
+            // Calculer les totaux
+            const items = Cart.getItems();
+            const subtotal = Cart.getTotal();
+            const shipping = subtotal > 150 ? 0 : 7.000;
+            const total = subtotal + shipping;
+
+            // Envoyer la commande au serveur
+            try {
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderNumber,
+                        customerName: name,
+                        customerPhone: phone,
+                        customerEmail: email,
+                        customerAddress: address,
+                        notes,
+                        paymentMethod,
+                        items,
+                        subtotal,
+                        shipping,
+                        total
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'enregistrement de la commande');
+                }
+
+                const result = await response.json();
+                
+                // Afficher les détails de commande
+                const paymentLabels = {
+                    'cash': '💵 Paiement à la livraison',
+                    'card': '💳 Carte bancaire',
+                    'transfer': '🏦 Virement bancaire'
+                };
+
+                document.getElementById('orderNumber').textContent = orderNumber;
+                document.getElementById('orderDetails').innerHTML = `
+                    <div class="order-info">
+                        <p><strong>Client:</strong> ${escapeHtml(name)}</p>
+                        <p><strong>Téléphone:</strong> ${escapeHtml(phone)}</p>
+                        <p><strong>Adresse:</strong> ${escapeHtml(address)}</p>
+                        <p><strong>Paiement:</strong> ${paymentLabels[paymentMethod]}</p>
+                        <p><strong>Total:</strong> ${formatPrice(total)}</p>
+                    </div>
+                `;
+
+                // Fermer le modal de checkout
+                closeCheckoutModal();
+                
+                // Vider le panier
+                Cart.clear();
+                updateCartCount();
+                
+                // Afficher le modal de succès
+                document.getElementById('orderModal').classList.add('show');
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de l\'enregistrement de la commande. Veuillez réessayer.', 'error');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').classList.remove('show');
+            renderCart();
+        }
+
+        function closeModalAndRedirect() {
+            closeModal();
+            window.location.href = 'products.html';
+        }
+
+        // === ADMIN LOGIN FUNCTIONS ===
+        const ADMIN_PASSWORD = 'admin123';
+
+        function openAdminLogin(e) {
+            e.preventDefault();
+            document.getElementById('adminLoginModal').classList.add('show');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminPasswordInput').focus();
+            document.getElementById('loginErrorMsg').classList.remove('show');
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLoginModal').classList.remove('show');
+        }
+
+        function checkAdminPassword(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPasswordInput').value;
+            const errorEl = document.getElementById('loginErrorMsg');
+            
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                errorEl.classList.add('show');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('adminPasswordInput').focus();
+                setTimeout(() => errorEl.classList.remove('show'), 3000);
+            }
+            return false;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAdminLogin();
+                closeCheckoutModal();
+            }
+        });
+    </script>
+</body>
+</html>
